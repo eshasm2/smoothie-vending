@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 // LoginScreen Component
 export default function LoginScreen({ onLogin }) {
-  const [mode, setMode] = useState(null); // Tracks the current mode (guest, returning user, admin)
-  const [phone, setPhone] = useState(""); // Phone number for returning user
-  const [name, setName] = useState(""); // Name for returning user
+  const [mode, setMode] = useState(null); // Tracks the current mode (guest, returning user, admin, sign up)
+  const [name, setName] = useState(""); // Name for user
+  const [phone, setPhone] = useState(""); // Phone number for user
   const [password, setPassword] = useState(""); // Password for admin login
   const [error, setError] = useState(""); // Error message
   const [loading, setLoading] = useState(false); // Loading state for database operations
@@ -21,46 +21,43 @@ export default function LoginScreen({ onLogin }) {
 
   // Function for returning user login
   const handleReturningUserLogin = async () => {
-    // Validate inputs
     if (!name.trim() || !phone.trim()) {
-      setError("Please enter both name and phone number");
+      setError("Please enter both name and phone number.");
       return;
     }
 
     setLoading(true);
     try {
-      // Clean phone number - remove non-numeric characters
-      const phoneNumber = phone.replace(/\D/g, "");
-      
+      const phoneNumber = phone.replace(/\D/g, ""); // Clean phone number to remove non-numeric characters
+
       if (!phoneNumber) {
-        setError("Please enter a valid phone number");
+        setError("Please enter a valid phone number.");
         setLoading(false);
         return;
       }
 
-      console.log("Saving user data:", { name, phone: phoneNumber });
-
-      // Insert name and phone number into Supabase
-      const { data, error: supabaseError } = await supabase
+      // Check if the phone number exists in Supabase
+      const { data, error: phoneError } = await supabase
         .from("users")
-        .upsert({ 
-          name, 
-          phone: phoneNumber,
-          created_at: new Date().toISOString() // Only set for new records due to upsert
-        }, { 
-          onConflict: 'phone' // This ensures we don't create duplicates
-        });
+        .select("phone")
+        .eq("phone", phoneNumber)
+        .single();
 
-      if (supabaseError) {
-        console.error("Error saving user data:", supabaseError);
-        setError("Failed to save user data: " + supabaseError.message);
-      } else {
-        console.log("User data saved successfully:", data);
+      if (phoneError) {
+        setError("Error checking user.");
+        setLoading(false);
+        return;
+      }
+
+      if (data) {
+        console.log("Returning user data found:", data);
         onLogin("user"); // Set user as authenticated
         navigate("/"); // Navigate to the MenuPage
+      } else {
+        setError("No user found. Please sign up first.");
       }
     } catch (err) {
-      console.error("Error in login process:", err);
+      console.error("Error in process:", err);
       setError("An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
@@ -70,26 +67,71 @@ export default function LoginScreen({ onLogin }) {
   // Function for admin login
   const handleAdminLogin = async () => {
     if (!password.trim()) {
-      setError("Please enter the admin password");
+      setError("Please enter the admin password.");
       return;
     }
 
     setLoading(true);
     try {
-      // Simple admin password check - in production, use proper authentication
-      if (password === "admin123") { // Replace with secure verification
+      // Simple admin password check - replace with secure method in production
+      if (password === "admin123") {
         console.log("Admin login successful");
         onLogin("admin");
         navigate("/admin");
       } else {
-        setError("Invalid admin password");
+        setError("Invalid admin password.");
       }
     } catch (err) {
       console.error("Error in admin login:", err);
-      setError("Admin authentication failed");
+      setError("Admin authentication failed.");
     } finally {
       setLoading(false);
     }
+  };
+
+  // Function for sign-up
+  const handleSignUp = async () => {
+    if (!name.trim() || !phone.trim()) {
+      setError("Please enter both name and phone number.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const phoneNumber = phone.replace(/\D/g, ""); // Clean phone number to remove non-numeric characters
+
+      if (!phoneNumber) {
+        setError("Please enter a valid phone number.");
+        setLoading(false);
+        return;
+      }
+
+      // Insert name and phone number into Supabase
+      const { error: signUpError } = await supabase
+        .from("users")
+        .insert([{ name, phone: phoneNumber }]);
+
+      if (signUpError) {
+        setError("Error signing up: " + signUpError.message);
+        setLoading(false);
+        return;
+      }
+
+      console.log("Sign up successful");
+      onLogin("user"); // Set user as authenticated
+      navigate("/"); // Navigate to the MenuPage
+    } catch (err) {
+      console.error("Error in sign-up process:", err);
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to handle back to main options
+  const handleBack = () => {
+    setMode(null);
+    setError(""); // Clear any previous error
   };
 
   return (
@@ -112,17 +154,19 @@ export default function LoginScreen({ onLogin }) {
         }}
       >
         <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Welcome</h2>
-        
+
         {/* Error message display */}
         {error && (
-          <div style={{ 
-            color: "red", 
-            textAlign: "center", 
-            marginBottom: "10px",
-            padding: "8px",
-            backgroundColor: "rgba(254, 226, 226, 0.5)",
-            borderRadius: "4px" 
-          }}>
+          <div
+            style={{
+              color: "red",
+              textAlign: "center",
+              marginBottom: "10px",
+              padding: "8px",
+              backgroundColor: "rgba(254, 226, 226, 0.5)",
+              borderRadius: "4px",
+            }}
+          >
             {error}
           </div>
         )}
@@ -146,7 +190,7 @@ export default function LoginScreen({ onLogin }) {
             </button>
             <button
               onClick={() => {
-                setMode("phone");
+                setMode("returning");
                 setError("");
               }}
               style={{
@@ -178,12 +222,43 @@ export default function LoginScreen({ onLogin }) {
             >
               Admin
             </button>
+            <button
+              onClick={() => {
+                setMode("signUp");
+                setError("");
+              }}
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: "8px",
+                backgroundColor: "#fbbf24",
+                color: "white",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Sign Up
+            </button>
           </div>
         )}
 
         {/* Returning user login */}
-        {mode === "phone" && (
+        {mode === "returning" && (
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <button
+              onClick={handleBack} // Back button
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: "8px",
+                backgroundColor: "#e2e8f0",
+                color: "#333",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Back
+            </button>
             <input
               type="text"
               placeholder="Name"
@@ -219,24 +294,7 @@ export default function LoginScreen({ onLogin }) {
                 cursor: loading ? "default" : "pointer",
               }}
             >
-              {loading ? "Saving..." : "Login"}
-            </button>
-            <button
-              onClick={() => {
-                setMode(null);
-                setError("");
-              }}
-              disabled={loading}
-              style={{
-                width: "100%",
-                padding: "12px",
-                borderRadius: "8px",
-                backgroundColor: "#d1d5db",
-                border: "none",
-                cursor: loading ? "default" : "pointer",
-              }}
-            >
-              Back
+              {loading ? "Logging in..." : "Login"}
             </button>
           </div>
         )}
@@ -244,6 +302,20 @@ export default function LoginScreen({ onLogin }) {
         {/* Admin login */}
         {mode === "admin" && (
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <button
+              onClick={handleBack} // Back button
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: "8px",
+                backgroundColor: "#e2e8f0",
+                color: "#333",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Back
+            </button>
             <input
               type="password"
               placeholder="Admin Password"
@@ -262,30 +334,70 @@ export default function LoginScreen({ onLogin }) {
                 width: "100%",
                 padding: "12px",
                 borderRadius: "8px",
-                backgroundColor: loading ? "#c4b5fd" : "#8b5cf6",
+                backgroundColor: loading ? "#93c5fd" : "#8b5cf6",
                 color: "white",
                 border: "none",
                 cursor: loading ? "default" : "pointer",
               }}
             >
-              {loading ? "Verifying..." : "Login as Admin"}
+              {loading ? "Logging in..." : "Login"}
             </button>
+          </div>
+        )}
+
+        {/* Sign up */}
+        {mode === "signUp" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             <button
-              onClick={() => {
-                setMode(null);
-                setError("");
+              onClick={handleBack} // Back button
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: "8px",
+                backgroundColor: "#e2e8f0",
+                color: "#333",
+                border: "none",
+                cursor: "pointer",
               }}
+            >
+              Back
+            </button>
+            <input
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              style={{
+                padding: "10px",
+                borderRadius: "8px",
+                border: "1px solid #d1d5db",
+              }}
+            />
+            <input
+              type="tel"
+              placeholder="Phone Number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              style={{
+                padding: "10px",
+                borderRadius: "8px",
+                border: "1px solid #d1d5db",
+              }}
+            />
+            <button
+              onClick={handleSignUp}
               disabled={loading}
               style={{
                 width: "100%",
                 padding: "12px",
                 borderRadius: "8px",
-                backgroundColor: "#d1d5db",
+                backgroundColor: loading ? "#93c5fd" : "#fbbf24",
+                color: "white",
                 border: "none",
                 cursor: loading ? "default" : "pointer",
               }}
             >
-              Back
+              {loading ? "Signing up..." : "Sign Up"}
             </button>
           </div>
         )}

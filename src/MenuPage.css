@@ -1,140 +1,179 @@
-/* MenuPage.css */
-.menu-page {
+.menu-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background-color: #f0fff0; /* Very light green */
+    overflow: hidden;
+  }
+  
+  /* Left Side - Smoothie List */
+  .menu-left {
+    flex: 2; /* Adjust to occupy more space, if you want a 2:1 ratio */
     padding: 20px;
-    font-family: 'Roboto', sans-serif;
-    text-align: center;
-}
-
-.menu-page h1 {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #388e3c;
-    margin-bottom: 20px;
-}
-
-.menu-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 columns */
-    gap: 20px; /* Space between items */
-    padding: 20px;
-    justify-content: center;
-}
-
-.menu-item {
-    width: 100%;
-    max-width: 250px; /* Keep box size consistent */
-    text-align: center;
-    padding: 15px;
-    border-radius: 10px;
     background: white;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Added background-color transition */
-    cursor: pointer; /* Change cursor to pointer to indicate clickable item */
-}
-
-.menu-item:hover {
-    transform: translateY(-5px); /* Slightly lift the item on hover */
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
-    background-color: #ffe0b2; /* Light pastel orange */
-}
-
-.smoothie-image {
-    width: 80%;  /* Reduce image width inside the box */
-    height: auto; /* Maintain aspect ratio */
-    max-height: 150px; /* Limit height */
-    object-fit: contain; /* Ensures the entire image fits */
-    display: block;
-    margin: 0 auto; /* Centers the image horizontally */
-}
-
-.menu-item h3 {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #388e3c;
-}
-
-.menu-item p {
+    border-right: 2px solid #ddd;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .menu-left h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 10px;
+  }
+  
+  .menu-item {
+    padding: 15px;
+    background: #fff9e6; /* Light yellow */
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, background-color 0.3s ease-in-out;
+    position: relative; /* For positioning the buttons */
+  }
+  
+  .menu-item:hover {
+    transform: scale(1.05);
+    background-color: #a8e6cf; /* Pastel light green on hover */
+  }
+  
+  .smoothie-image {
+    width: 100%;
+    height: 150px;
+    object-fit: contain; /* Ensures the full image fits without being cropped */
+    border-radius: 8px;
+    background-color: white; /* Adds a clean background if the image has transparency */
+  }
+  
+  .menu-item h3 {
+    margin: 10px 0 5px;
     font-size: 1.2rem;
-    color: #555;
-    margin-bottom: 15px;
-}
-
-.menu-item button {
+  }
+  
+  .menu-item p {
+    font-weight: bold;
+    color: #444;
+  }
+  
+  /* More Info Button */
+  .more-info-button {
     background-color: #81c784;
     color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    border: none; /* Removes any border */
-    outline: none; /* Removes the black outline */
-}
-
-.menu-item button:hover {
-    background-color: #66bb6a;
-    transform: translateY(-2px);
-}
-
-/* Cart Styles */
-.cart {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    margin: 20px auto;
-}
-
-.cart h2 {
-    font-size: 2rem;
-    color: #388e3c;
-}
-
-.cart ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.cart ul li {
-    font-size: 1.2rem;
-    padding: 10px 0;
-    border-bottom: 1px solid #ddd;
-}
-
-.cart ul li button {
-    background-color: #f44336;
-    color: white;
-    font-size: 1rem;
+    font-size: 14px;
     padding: 8px 16px;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
-    border: none; /* Removes any border */
-    outline: none; /* Removes the black outline */
-}
-
-.cart ul li button:hover {
-    background-color: #d32f2f;
-}
-
-.cart h3 {
-    font-size: 1.6rem;
-    margin-top: 15px;
-    font-weight: 500;
-}
-
-.cart button {
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .more-info-button:hover {
+    background-color: #66bb6a;
+  }
+  
+  /* Add to cart button (plus sign) */
+  .add-to-cart-button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #81c784;
+    color: white;
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 5px; /* Not round anymore */
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .add-to-cart-button:hover {
+    background-color: #66bb6a;
+  }
+  
+  .add-to-cart-button:focus {
+    outline: none; /* Remove focus outline */
+  }
+  
+  /* Right Side - Order Summary */
+  .menu-right {
+    flex: 1; /* Adjusted to take up less space than the left side */
+    padding: 20px;
+    background: white;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  .cart-list {
     width: 100%;
-    font-size: 1.2rem;
-    padding: 15px;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #e3f2fd; /* Light blue */
+    margin-bottom: 10px;
+    border-radius: 8px;
+    width: 100%;
+  }
+  
+  .add-ins {
+    font-size: 0.9rem;
+    color: #777;
+    margin-top: 5px;
+  }
+  
+  .remove-button {
+    background-color: #f44336; /* Red background */
+    color: black; /* Black 'X' */
+    font-size: 14px;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-align: center;
+    padding: 0;
+  }
+  
+  .remove-button:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+  }
+  
+  .checkout-button {
+    width: 100%;
+    padding: 12px;
     margin-top: 20px;
     background-color: #388e3c;
     color: white;
-    border-radius: 8px;
-    border: none; /* Removes any border */
-    outline: none; /* Removes the black outline */
-}
-
-.cart button:hover {
-    background-color: #66bb6a;
-}
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+  }
+  
+  .checkout-button:hover {
+    background-color: #2e7d32;
+  }
+  

@@ -14,7 +14,7 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     const calculateTotal = () => {
-      const subtotal = state.cart.reduce((total, item) => total + item.price * (item.quantity || 1), 0);
+      const subtotal = state.cart.reduce((total, item) => total + item.totalPrice * (item.quantity || 1), 0); // Use totalPrice instead of price
       const taxAmount = subtotal * 0.08; // Standard 8% tax rate
       setTotalAmount(subtotal + taxAmount);
       setTax(taxAmount);
@@ -111,7 +111,7 @@ const CheckoutPage = () => {
         <ul>
           {state.cart.map((item, index) => (
             <li key={index}>
-              {item.name} - ${item.price.toFixed(2)} x {item.quantity || 1}
+              {item.name} - ${item.totalPrice.toFixed(2)} x {item.quantity || 1} {/* Use totalPrice */}
             </li>
           ))}
         </ul>
