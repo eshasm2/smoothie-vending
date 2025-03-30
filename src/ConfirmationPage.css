@@ -1,0 +1,55 @@
+/* ConfirmationPage.css */
+.confirmation-page {
+    padding: 30px;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f1f8e9;  /* Light green background */
+  }
+  
+  .confirmation-page h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #388e3c;
+  }
+  
+  .order-details {
+    margin: 20px auto;
+    max-width: 600px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .order-details h3 {
+    color: #388e3c;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .order-details ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .order-details ul li {
+    font-size: 1.1rem;
+    color: #555;
+  }
+  
+  button {
+    background-color: #81c784;
+    color: white;
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    display: block;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #66bb6a;
+  }
+  

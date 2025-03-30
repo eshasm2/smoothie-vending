@@ -1,0 +1,116 @@
+/* CheckoutPage.css */
+.checkout-page {
+  padding: 40px 20px;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  background-color: #f4f9f4;  /* Light background to match the app theme */
+}
+
+.checkout-page h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #388e3c;
+  margin-bottom: 30px;
+}
+
+.checkout-summary {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left;  /* Align text to the left for a more professional look */
+}
+
+.checkout-summary h2 {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #388e3c;
+  margin-bottom: 25px;
+}
+
+.checkout-summary ul {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.checkout-summary ul li {
+  font-size: 1.2rem;
+  padding: 12px 0;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;  /* Align items to left and right */
+}
+
+.checkout-summary ul li span {
+  font-weight: bold;
+  color: #388e3c;
+}
+
+.checkout-summary h3 {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-top: 15px;
+  color: #388e3c;
+}
+
+.checkout-summary button {
+  width: 100%;
+  font-size: 1.3rem;
+  padding: 15px;
+  margin-top: 25px;
+  background-color: #388e3c;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.checkout-summary button:hover {
+  background-color: #66bb6a;
+}
+
+/* User Info */
+.user-info input {
+  padding: 10px;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  width: 100%;
+  max-width: 400px;
+}
+
+.guest-info {
+  margin-bottom: 20px;
+}
+
+.payment-method {
+  margin: 20px 0;
+}
+
+.payment-method input {
+  margin-right: 10px;
+}
+
+/* Adjust the "back" button or navigation button */
+.checkout-page button {
+  font-size: 1.2rem;
+  padding: 12px 20px;
+  margin-top: 30px;
+  background-color: #81c784;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.checkout-page button:hover {
+  background-color: #66bb6a;
+}

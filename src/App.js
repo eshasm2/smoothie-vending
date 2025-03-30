@@ -1,25 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import MenuPage from "./MenuPage";
+import CheckoutPage from "./CheckoutPage";
+import AdminPage from "./AdminPage";
+import LoginScreen from "./LoginScreen";
+import ConfirmationPage from "./ConfirmationPage"; // Import the new page
 
-function App() {
+const App = () => {
+  const [authState, setAuthState] = useState({
+    isAuthenticated: false,
+    userRole: null,
+  });
+
+  const handleLogin = (role = 'guest') => {
+    setAuthState({
+      isAuthenticated: true,
+      userRole: role,
+    });
+  };
+
+  const hasAdminAccess = () => {
+    return authState.isAuthenticated && authState.userRole === 'admin';
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        {/* Login route */}
+        <Route path="/login" element={<LoginScreen onLogin={handleLogin} />} />
+        
+        {/* Home/Menu route */}
+        <Route path="/" element={authState.isAuthenticated ? <MenuPage userRole={authState.userRole} /> : <Navigate to="/login" />} />
+
+        {/* Checkout route */}
+        <Route path="/checkout" element={authState.isAuthenticated ? <CheckoutPage userRole={authState.userRole} /> : <Navigate to="/login" />} />
+
+        {/* Admin route */}
+        <Route path="/admin" element={hasAdminAccess() ? <AdminPage /> : <Navigate to="/" />} />
+
+        {/* Confirmation route */}
+        <Route path="/confirmation" element={<ConfirmationPage />} />
+
+        {/* Catch-all route */}
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;

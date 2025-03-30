@@ -1,0 +1,63 @@
+/* AdminPage.css */
+.admin-page {
+  padding: 20px;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f1f8f4; /* Light green background for consistency */
+}
+
+.admin-header {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #388e3c; /* Match the primary color */
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  padding: 20px;
+}
+
+.admin-section {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  color: #388e3c;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.data-table th, .data-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.data-table th {
+  background-color: #388e3c;
+  color: white;
+}
+
+.data-table tr:hover {
+  background-color: #f1f8f4; /* Hover effect for rows */
+}
+
+@media (max-width: 768px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
