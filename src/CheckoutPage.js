@@ -9,6 +9,7 @@ const CheckoutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState('applePay');
   const [totalAmount, setTotalAmount] = useState(0);
   const [tax, setTax] = useState(0);
+  const [inventory, setInventory] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +31,17 @@ const CheckoutPage = () => {
       }
     };
 
+    const fetchInventoryData = async () => {
+      const { data: inventoryData, error } = await supabase.from("inventory").select("*");
+      if (error) {
+        console.error("Error fetching inventory data:", error);
+      } else {
+        setInventory(inventoryData);
+      }
+    };
+
     fetchUserData();
+    fetchInventoryData();
   }, [state.cart]);
 
   const handlePlaceOrder = async () => {
@@ -47,14 +58,37 @@ const CheckoutPage = () => {
       date: new Date().toISOString(),
     };
 
-    const { error } = await supabase
+    const { error: orderError } = await supabase
       .from('orders')
       .insert([orderData]);
 
-    if (error) {
-      console.error('Failed to place order:', error);
+    if (orderError) {
+      console.error('Failed to place order:', orderError);
       alert('Failed to place order, please try again.');
     } else {
+      // Update the inventory for each smoothie in the cart
+      for (const item of state.cart) {
+        const smoothieInventory = inventory.find((invItem) => invItem.smoothie_id === item.id);
+        if (smoothieInventory) {
+          // Decrease inventory for the smoothie
+          const newQuantity = smoothieInventory.quantity_available - item.quantity;
+          
+          // Update the inventory in the database
+          const { data, error: inventoryError } = await supabase
+            .from('inventory')
+            .update({ quantity_available: newQuantity })
+            .eq('smoothie_id', smoothieInventory.smoothie_id);
+
+          if (inventoryError) {
+            console.error('Failed to update inventory:', inventoryError);
+            alert(`Failed to update inventory for ${item.name}. Please try again later.`);
+            return;
+          } else {
+            console.log('Inventory updated successfully:', data);
+          }
+        }
+      }
+
       // Navigate to the confirmation page with order details and wait time
       navigate('/confirmation', {
         state: {

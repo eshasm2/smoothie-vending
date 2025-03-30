@@ -1,45 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from './supabaseClient';
-import { useNavigate } from 'react-router-dom';
-import './MenuPage.css';
+import React, { useState, useEffect } from "react";
+import { supabase } from "./supabaseClient";
+import { useNavigate } from "react-router-dom";
+import "./MenuPage.css";
 
-const MenuPage = () => {
+const MenuPage = ({ cart, addToCart, handleRemoveFromCart }) => {
   const [smoothies, setSmoothies] = useState([]);
-  const [cart, setCart] = useState([]);  // Stores selected smoothies
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSmoothies = async () => {
-      const { data, error } = await supabase.from('smoothies').select('*');
-      if (error) console.error('Error fetching smoothies:', error);
-      else setSmoothies(data);
+      // Try to get the smoothies from localStorage
+      const cachedSmoothies = localStorage.getItem("smoothies");
+
+      // If cached smoothies exist, use them
+      if (cachedSmoothies) {
+        setSmoothies(JSON.parse(cachedSmoothies));
+      }
+
+      // Fetch data from Supabase
+      const { data, error } = await supabase.from("smoothies").select("*");
+      if (error) {
+        console.error("Error fetching smoothies:", error);
+      } else {
+        // Set the fresh data into state
+        setSmoothies(data);
+
+        // Update localStorage to store the fresh data
+        localStorage.setItem("smoothies", JSON.stringify(data));
+      }
     };
+
     fetchSmoothies();
+
+    // Optional: clear localStorage when the component unmounts
+    return () => {
+      localStorage.removeItem("smoothies");
+    };
   }, []);
 
-  const handleAddToOrder = (smoothie) => {
-    setCart((prevCart) => {
-      const existingSmoothie = prevCart.find(item => item.id === smoothie.id);
-      if (existingSmoothie) {
-        // If smoothie already in cart, increment quantity
-        return prevCart.map(item =>
-          item.id === smoothie.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        // If smoothie not in cart, add to cart with quantity 1
-        return [...prevCart, { ...smoothie, quantity: 1 }];
-      }
-    });
+  // Handle clicking on a smoothie to navigate to the details page
+  const handleSmoothieClick = (smoothie) => {
+    navigate(`/smoothie/${smoothie.id}`, { state: { smoothie } });
   };
 
-  const handleRemoveFromOrder = (index) => {
-    setCart((prevCart) => prevCart.filter((_, i) => i !== index)); // Remove item by index
-  };
-
-  const handleCheckout = () => {
-    navigate('/checkout', { state: { cart } }); // Pass cart data to checkout page
+  // Handle adding a smoothie to the cart
+  const handleAddToCart = (smoothie) => {
+    addToCart(smoothie);
   };
 
   return (
@@ -47,11 +53,30 @@ const MenuPage = () => {
       <h1>Smoothie Menu</h1>
       <div className="menu-grid">
         {smoothies.map((smoothie) => (
-          <div className="menu-item" key={smoothie.id}>
+          <div 
+            className="menu-item" 
+            key={smoothie.id} 
+            onClick={() => handleSmoothieClick(smoothie)} 
+            style={{ cursor: "pointer" }}
+          >
             <img className="smoothie-image" src={smoothie.image_url} alt={smoothie.name} />
             <h3>{smoothie.name}</h3>
             <p>${smoothie.price.toFixed(2)}</p>
-            <button onClick={() => handleAddToOrder(smoothie)}>Add to Order</button>
+            <button 
+              onClick={(e) => { e.stopPropagation(); handleAddToCart(smoothie); }}
+              style={{
+                backgroundColor: "#81c784",
+                color: "white",
+                padding: "10px 20px",
+                borderRadius: "8px",
+                fontSize: "1.1rem",
+                cursor: "pointer",
+                border: "none",
+                outline: "none",
+              }}
+            >
+              Add to Cart
+            </button>
           </div>
         ))}
       </div>
@@ -62,13 +87,27 @@ const MenuPage = () => {
           <ul>
             {cart.map((item, index) => (
               <li key={index}>
-                {item.name} - ${item.price.toFixed(2)} x {item.quantity} 
-                <button onClick={() => handleRemoveFromOrder(index)}>Remove</button>
+                {item.name} - ${item.price.toFixed(2)} x {item.quantity}
+                <button
+                  onClick={() => handleRemoveFromCart(item.id)}
+                  style={{
+                    marginLeft: "10px",
+                    backgroundColor: "#f44336",
+                    color: "white",
+                    fontSize: "12px",  // Smaller font size
+                    padding: "3px 8px",  // Smaller padding to make the button less wide
+                    border: "none",
+                    borderRadius: "5px",  // Rounded corners
+                    cursor: "pointer",
+                  }}
+                >
+                  Remove
+                </button>
               </li>
             ))}
           </ul>
           <h3>Total: ${cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}</h3>
-          <button onClick={handleCheckout}>Proceed to Checkout</button>
+          <button onClick={() => navigate("/checkout", { state: { cart } })}>Proceed to Checkout</button>
         </div>
       )}
     </div>

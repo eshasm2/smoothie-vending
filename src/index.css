@@ -8,6 +8,12 @@
 html, body {
   height: 100%; /* Ensure the page takes full height */
 }
+/* In your main CSS file (e.g., index.css, App.css, or global.css) */
+html, body {
+  height: 100%;
+  overflow: auto;  /* Allows scrolling */
+  margin: 0;
+}
 
 body {
   font-family: 'Quicksand', sans-serif; /* You can use any font you prefer */

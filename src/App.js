@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import MenuPage from "./MenuPage";
+import SmoothieDetails from "./SmoothieDetails";
 import CheckoutPage from "./CheckoutPage";
 import AdminPage from "./AdminPage";
 import LoginScreen from "./LoginScreen";
-import ConfirmationPage from "./ConfirmationPage"; // Import the new page
+import ConfirmationPage from "./ConfirmationPage";
 
 const App = () => {
   const [authState, setAuthState] = useState({
@@ -12,7 +13,24 @@ const App = () => {
     userRole: null,
   });
 
-  const handleLogin = (role = 'guest') => {
+  const [cart, setCart] = useState([]);
+
+  const addToCart = (smoothie) => {
+    setCart((prevCart) => {
+      const existingSmoothie = prevCart.find(item => item.id === smoothie.id);
+      if (existingSmoothie) {
+        return prevCart.map(item =>
+          item.id === smoothie.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        return [...prevCart, { ...smoothie, quantity: 1 }];
+      }
+    });
+  };
+
+  const handleLogin = (role = "guest") => {
     setAuthState({
       isAuthenticated: true,
       userRole: role,
@@ -20,28 +38,27 @@ const App = () => {
   };
 
   const hasAdminAccess = () => {
-    return authState.isAuthenticated && authState.userRole === 'admin';
+    return authState.isAuthenticated && authState.userRole === "admin";
   };
 
   return (
     <Router>
       <Routes>
-        {/* Login route */}
         <Route path="/login" element={<LoginScreen onLogin={handleLogin} />} />
-        
-        {/* Home/Menu route */}
-        <Route path="/" element={authState.isAuthenticated ? <MenuPage userRole={authState.userRole} /> : <Navigate to="/login" />} />
-
-        {/* Checkout route */}
-        <Route path="/checkout" element={authState.isAuthenticated ? <CheckoutPage userRole={authState.userRole} /> : <Navigate to="/login" />} />
-
-        {/* Admin route */}
+        <Route 
+          path="/" 
+          element={authState.isAuthenticated ? <MenuPage cart={cart} addToCart={addToCart} /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/smoothie/:id" 
+          element={authState.isAuthenticated ? <SmoothieDetails addToCart={addToCart} /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/checkout" 
+          element={authState.isAuthenticated ? <CheckoutPage cart={cart} /> : <Navigate to="/login" />} 
+        />
         <Route path="/admin" element={hasAdminAccess() ? <AdminPage /> : <Navigate to="/" />} />
-
-        {/* Confirmation route */}
         <Route path="/confirmation" element={<ConfirmationPage />} />
-
-        {/* Catch-all route */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>

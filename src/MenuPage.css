@@ -14,30 +14,37 @@
 
 .menu-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);  /* Create a 3x3 grid */
-    gap: 20px;  /* Space between grid items */
-    padding: 0 20px;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    gap: 20px; /* Space between items */
+    padding: 20px;
+    justify-content: center;
 }
 
 .menu-item {
-    background-color: #ffffff;  /* White background for each item */
-    border-radius: 8px;
+    width: 100%;
+    max-width: 250px; /* Keep box size consistent */
+    text-align: center;
     padding: 15px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Added background-color transition */
+    cursor: pointer; /* Change cursor to pointer to indicate clickable item */
 }
 
 .menu-item:hover {
-    transform: translateY(-5px);  /* Slightly lift the item on hover */
+    transform: translateY(-5px); /* Slightly lift the item on hover */
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    background-color: #ffe0b2; /* Light pastel orange */
 }
 
 .smoothie-image {
-    width: 100%;
-    max-width: 180px;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 10px;
+    width: 80%;  /* Reduce image width inside the box */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 150px; /* Limit height */
+    object-fit: contain; /* Ensures the entire image fits */
+    display: block;
+    margin: 0 auto; /* Centers the image horizontally */
 }
 
 .menu-item h3 {
