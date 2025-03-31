@@ -20,7 +20,7 @@ cd zenblen-smoothie-kiosk
 npm start
 ```
 
-4. Access the app
+3. Access the app
    
 Once the server is running, open the browser and go to http://localhost:3000.
 
