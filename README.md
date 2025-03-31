@@ -10,7 +10,7 @@ npm install react react-router-dom supabase axios
 
 2. Clone the repository
    
-git clone https://github.com/eshasm2/zenblen-smoothie-kiosk.git
+git clone [https://github.com/eshasm2/zenblen-smoothie-kiosk.git](https://github.com/eshasm2/smoothie-vending.git)
 
 ```bash
 cd zenblen-smoothie-kiosk
