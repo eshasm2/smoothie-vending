@@ -12,46 +12,39 @@ const App = () => {
   const [cart, setCart] = useState([]);
 
   const addToCart = (smoothie) => {
-    setCart((prevCart) => {
-      const updatedSmoothie = { ...smoothie, totalPrice: smoothie.totalPrice ?? smoothie.price, addIns: smoothie.addIns ?? [] };
-      const existingSmoothie = prevCart.find((item) => item.id === updatedSmoothie.id && JSON.stringify(item.addIns) === JSON.stringify(updatedSmoothie.addIns));
-
-      if (existingSmoothie) {
-        return prevCart.map((item) =>
-          item.id === updatedSmoothie.id && JSON.stringify(item.addIns) === JSON.stringify(updatedSmoothie.addIns)
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        return [...prevCart, { ...updatedSmoothie, quantity: 1 }];
-      }
-    });
+    setCart((prevCart) =>
+      prevCart.some((item) => item.id === smoothie.id)
+        ? prevCart.map((item) => (item.id === smoothie.id ? { ...item, quantity: item.quantity + 1 } : item))
+        : [...prevCart, { ...smoothie, quantity: 1 }]
+    );
   };
 
-  const handleRemoveFromCart = (id, addIns) => {
+  const handleRemoveFromCart = (id) => {
     setCart((prevCart) =>
-      prevCart
-        .map((item) =>
-          item.id === id && JSON.stringify(item.addIns) === JSON.stringify(addIns) ? { ...item, quantity: item.quantity - 1 } : item
-        )
-        .filter((item) => item.quantity > 0)
+      prevCart.map((item) => (item.id === id ? { ...item, quantity: item.quantity - 1 } : item)).filter((item) => item.quantity > 0)
     );
   };
 
   const handleLogin = (role = "guest") => setAuthState({ isAuthenticated: true, userRole: role });
   const handleLogout = () => setAuthState({ isAuthenticated: false, userRole: null });
-  const hasAdminAccess = () => authState.isAuthenticated && authState.userRole === "admin";
 
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<LoginScreen onLogin={handleLogin} />} />
-        <Route path="/" element={authState.isAuthenticated ? <MenuPage cart={cart} addToCart={addToCart} handleRemoveFromCart={handleRemoveFromCart} handleLogout={handleLogout} /> : <Navigate to="/login" />} />
-        <Route path="/smoothie/:id" element={authState.isAuthenticated ? <SmoothieDetails addToCart={addToCart} /> : <Navigate to="/login" />} />
-        <Route path="/checkout" element={authState.isAuthenticated ? <CheckoutPage cart={cart} handleRemoveFromCart={handleRemoveFromCart} /> : <Navigate to="/login" />} />
-        <Route path="/admin" element={hasAdminAccess() ? <AdminPage /> : <Navigate to="/" />} />
-        <Route path="/confirmation" element={<ConfirmationPage cart={cart} />} />
-        <Route path="*" element={<Navigate to="/login" />} />
+        
+        {authState.isAuthenticated? (
+          <>
+            <Route path="/" element={<MenuPage cart={cart} addToCart={addToCart} 
+            handleRemoveFromCart={handleRemoveFromCart} handleLogout={handleLogout} />} />
+            <Route path="/smoothie/:id" element={<SmoothieDetails addToCart={addToCart} />} />
+            <Route path="/checkout" element={<CheckoutPage cart={cart} handleRemoveFromCart={handleRemoveFromCart} />} />
+            <Route path="/confirmation" element={<ConfirmationPage cart={cart} />} />
+            {authState.userRole === "admin" && <Route path="/admin" element={<AdminPage />} />}
+          </>
+        ) : (
+          <Route path="*" element={<Navigate to="/login" />} />
+        )}
       </Routes>
     </Router>
   );

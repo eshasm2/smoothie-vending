@@ -9,32 +9,25 @@ const AdminPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch orders
-        const { data: ordersData } = await supabase
-          .from('orders')
-          .select('*')
-          .order('date', { ascending: false });
-        setOrders(ordersData);
+        // Fetch orders, inventory, and smoothie names from the database
+        const { data: ordersData } = await supabase.from('orders').select('*').order('date', { ascending: false });
+        const { data: inventoryData } = await supabase.from('inventory').select('smoothie_id, quantity_available');
+        const { data: smoothiesData } = await supabase.from('smoothies').select('id, name');
 
-        // Fetch inventory and smoothie names
-        const { data: inventoryData } = await supabase
-          .from('inventory')
-          .select('smoothie_id, quantity_available');
-        const { data: smoothiesData } = await supabase
-          .from('smoothies')
-          .select('id, name');
+        // Set orders state
+        setOrders(ordersData || []);
 
-        // Combine inventory and smoothie names
-        const combinedInventory = inventoryData.map((item) => {
-          const smoothie = smoothiesData.find(smoothie => smoothie.id === item.smoothie_id);
-          return { ...item, smoothie_name: smoothie ? smoothie.name : 'Unknown' };
-        });
-        setInventory(combinedInventory);
+        // Merge inventory data with smoothie names
+        setInventory(
+          inventoryData.map(item => ({
+            ...item,
+            smoothie_name: smoothiesData?.find(s => s.id === item.smoothie_id).name || 'Unknown'
+          })) || []
+        );
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-
     fetchData();
   }, []);
 
@@ -42,21 +35,16 @@ const AdminPage = () => {
     <div className="admin-page">
       <h1>Admin Dashboard</h1>
 
-      {/* Sales Data */}
-      <div className="admin-section">
+      {/* Sales Data Section */}
+      <section className="admin-section">
         <h2>Sales Data</h2>
-        {orders.length > 0 ? (
+        {orders.length ? (
           <table>
             <thead>
-              <tr>
-                <th>Customer Name</th>
-                <th>Smoothies Ordered</th>
-                <th>Total Price</th>
-                <th>Order Date</th>
-              </tr>
+              <tr><th>Customer</th><th>Smoothies</th><th>Price</th><th>Date</th></tr>
             </thead>
             <tbody>
-              {orders.map((order) => (
+              {orders.map(order => (
                 <tr key={order.id}>
                   <td>{order.customer_name}</td>
                   <td>{order.smoothies.join(', ')}</td>
@@ -66,25 +54,19 @@ const AdminPage = () => {
               ))}
             </tbody>
           </table>
-        ) : (
-          <p>No orders yet.</p>
-        )}
-      </div>
+        ) : <p>No orders yet.</p>}
+      </section>
 
-      {/* Inventory Data */}
-      <div className="admin-section">
+      {/* Inventory Data Section */}
+      <section className="admin-section">
         <h2>Inventory Data</h2>
-        {inventory.length > 0 ? (
+        {inventory.length ? (
           <table>
             <thead>
-              <tr>
-                <th>Smoothie ID</th>
-                <th>Smoothie Name</th>
-                <th>Available Quantity</th>
-              </tr>
+              <tr><th>ID</th><th>Name</th><th>Quantity</th></tr>
             </thead>
             <tbody>
-              {inventory.map((item) => (
+              {inventory.map(item => (
                 <tr key={item.smoothie_id}>
                   <td>{item.smoothie_id}</td>
                   <td>{item.smoothie_name}</td>
@@ -93,10 +75,8 @@ const AdminPage = () => {
               ))}
             </tbody>
           </table>
-        ) : (
-          <p>No inventory data available.</p>
-        )}
-      </div>
+        ) : <p>No inventory data available.</p>}
+      </section>
     </div>
   );
 };

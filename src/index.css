@@ -6,26 +6,17 @@
 }
 
 html, body {
-  height: 100%; /* Ensure the page takes full height */
-}
-/* In your main CSS file (e.g., index.css, App.css, or global.css) */
-html, body {
   height: 100%;
-  overflow: auto;  /* Allows scrolling */
-  margin: 0;
-}
-
-body {
-  font-family: 'Quicksand', sans-serif; /* You can use any font you prefer */
-  background-color: #b9e7b2;  /* Light green background */
+  background-color: #b9e7b2; 
   color: #333;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  font-family: 'Quicksand', sans-serif;
+  overflow-x: hidden;  
 }
 
 #root {
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  height: 100%;
 }

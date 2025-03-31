@@ -1,179 +1,167 @@
+/* Menu Container */
 .menu-container {
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-    background-color: #f0fff0; /* Very light green */
-    overflow: hidden;
-  }
-  
-  /* Left Side - Smoothie List */
-  .menu-left {
-    flex: 2; /* Adjust to occupy more space, if you want a 2:1 ratio */
-    padding: 20px;
-    background: white;
-    border-right: 2px solid #ddd;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .menu-left h1 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .menu-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 10px;
-  }
-  
-  .menu-item {
-    padding: 15px;
-    background: #fff9e6; /* Light yellow */
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out, background-color 0.3s ease-in-out;
-    position: relative; /* For positioning the buttons */
-  }
-  
-  .menu-item:hover {
-    transform: scale(1.05);
-    background-color: #a8e6cf; /* Pastel light green on hover */
-  }
-  
-  .smoothie-image {
-    width: 100%;
-    height: 150px;
-    object-fit: contain; /* Ensures the full image fits without being cropped */
-    border-radius: 8px;
-    background-color: white; /* Adds a clean background if the image has transparency */
-  }
-  
-  .menu-item h3 {
-    margin: 10px 0 5px;
-    font-size: 1.2rem;
-  }
-  
-  .menu-item p {
-    font-weight: bold;
-    color: #444;
-  }
-  
-  /* More Info Button */
-  .more-info-button {
-    background-color: #81c784;
-    color: white;
-    font-size: 14px;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-  }
-  
-  .more-info-button:hover {
-    background-color: #66bb6a;
-  }
-  
-  /* Add to cart button (plus sign) */
-  .add-to-cart-button {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background-color: #81c784;
-    color: white;
-    font-size: 20px;
-    width: 30px;
-    height: 30px;
-    border: none;
-    border-radius: 5px; /* Not round anymore */
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.2s ease-in-out;
-  }
-  
-  .add-to-cart-button:hover {
-    background-color: #66bb6a;
-  }
-  
-  .add-to-cart-button:focus {
-    outline: none; /* Remove focus outline */
-  }
-  
-  /* Right Side - Order Summary */
-  .menu-right {
-    flex: 1; /* Adjusted to take up less space than the left side */
-    padding: 20px;
-    background: white;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-  }
-  
-  .cart-list {
-    width: 100%;
-    list-style: none;
-    padding: 0;
-  }
-  
-  .cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background: #e3f2fd; /* Light blue */
-    margin-bottom: 10px;
-    border-radius: 8px;
-    width: 100%;
-  }
-  
-  .add-ins {
-    font-size: 0.9rem;
-    color: #777;
-    margin-top: 5px;
-  }
-  
-  .remove-button {
-    background-color: #f44336; /* Red background */
-    color: black; /* Black 'X' */
-    font-size: 14px;
-    font-weight: bold;
-    width: 20px;
-    height: 20px;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    text-align: center;
-    padding: 0;
-  }
-  
-  .remove-button:hover {
-    background-color: #d32f2f; /* Darker red on hover */
-  }
-  
-  .checkout-button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 20px;
-    background-color: #388e3c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.2rem;
-  }
-  
-  .checkout-button:hover {
-    background-color: #2e7d32;
-  }
-  
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-color: #f0fff0; 
+  overflow: hidden;
+}
+
+/* Left Side (Smoothie List) */
+.menu-left {
+  flex: 2;
+  padding: 20px;
+  background: white;
+  border-right: 2px solid #ddd;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-left h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 10px;
+}
+
+.menu-item {
+  padding: 15px;
+  background: #fff9e6; 
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.3s;
+  position: relative;
+}
+
+.menu-item:hover {
+  transform: scale(1.05);
+  background-color: #a8e6cf; 
+}
+
+.smoothie-image {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.menu-item h3 {
+  margin: 10px 0 5px;
+  font-size: 1.2rem;
+}
+
+.menu-item p {
+  font-weight: bold;
+  color: #444;
+}
+
+.more-info-button, .add-to-cart-button, .remove-button, .checkout-button {
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.more-info-button, .checkout-button {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.more-info-button {
+  background-color: #81c784;
+  color: white;
+}
+
+.more-info-button:hover {
+  background-color: #66bb6a;
+}
+
+.add-to-cart-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #81c784;
+  color: white;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-to-cart-button:hover {
+  background-color: #66bb6a;
+}
+
+.remove-button {
+  background-color: #f44336;
+  color: black;
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.remove-button:hover {
+  background-color: #d32f2f;
+}
+
+.checkout-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  background-color: #388e3c;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.checkout-button:hover {
+  background-color: #2e7d32;
+}
+
+/* Right Side (Order Summary) */
+.menu-right {
+  flex: 1;
+  padding: 20px;
+  background: white;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.cart-list {
+  width: 100%;
+  list-style: none;
+  padding: 0;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: #e3f2fd; 
+  margin-bottom: 10px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.add-ins {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 5px;
+}

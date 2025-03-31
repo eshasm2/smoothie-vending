@@ -1,54 +1,53 @@
 /* Global Styles */
 body {
-  font-family: 'Poppins', sans-serif; /* Clean, professional font */
-  background-color: #f4f9f4; /* Soft light green background for a fresh vibe */
-  color: #333; /* Dark text for readability */
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4f9f4;
+  color: #333;
   margin: 0;
   padding: 0;
 }
 
-/* Smoothie Menu Styles */
+/* Menu Page Styles */
 .menu-page {
-  background-color: white; /* White background for menu */
+  background: white;
   padding: 40px 20px;
   text-align: center;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: auto;
 }
 
 .menu-page h1 {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #388e3c; /* Zenblen Green */
+  color: #388e3c;
   margin-bottom: 30px;
 }
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3-column grid */
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   padding: 0 20px;
 }
 
 .menu-item {
-  background-color: #ffffff; /* White background for items */
+  background: white;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: 0.3s ease;
 }
 
 .menu-item:hover {
-  transform: translateY(-5px); /* Slightly lift the item on hover */
-  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
 .smoothie-image {
   width: 100%;
   max-width: 200px;
-  height: auto;
   border-radius: 10px;
   margin-bottom: 15px;
 }
@@ -62,28 +61,26 @@ body {
 .menu-item p {
   font-size: 1.2rem;
   color: #555;
-  margin-bottom: 15px;
 }
 
 .menu-item button {
-  background-color: #81c784; /* Zenblen Green */
-  color: white;
+  background: #81c784;
   padding: 12px 25px;
   border-radius: 8px;
   font-size: 1rem;
-  transition: background-color 0.3s ease;
+  transition: 0.3s ease;
 }
 
 .menu-item button:hover {
-  background-color: #66bb6a; /* Darker green for hover */
+  background: #66bb6a;
 }
 
-/* Checkout Styles */
+/* Cart Styles */
 .cart {
-  background-color: #ffffff; /* White background */
+  background: white;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   max-width: 400px;
   margin: 20px auto;
 }
@@ -94,7 +91,7 @@ body {
 }
 
 .cart ul {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
 }
 
@@ -105,7 +102,7 @@ body {
 }
 
 .cart ul li button {
-  background-color: #f44336;
+  background: #f44336;
   color: white;
   font-size: 1rem;
   padding: 8px 16px;
@@ -114,13 +111,12 @@ body {
 }
 
 .cart ul li button:hover {
-  background-color: #d32f2f;
+  background: #d32f2f;
 }
 
 .cart h3 {
   font-size: 1.6rem;
   margin-top: 15px;
-  font-weight: 500;
 }
 
 .cart button {
@@ -128,11 +124,11 @@ body {
   font-size: 1.2rem;
   padding: 15px;
   margin-top: 20px;
-  background-color: #388e3c;
+  background: #388e3c;
   color: white;
   border-radius: 8px;
 }
 
 .cart button:hover {
-  background-color: #66bb6a;
+  background: #66bb6a;
 }

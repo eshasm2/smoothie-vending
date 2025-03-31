@@ -5,20 +5,19 @@
   background-color: #f0fff4;
 }
 
-.order-details {
-  width: 60%;
+.order-details, .order-status {
   padding: 20px;
   background-color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 }
 
+.order-details {
+  width: 60%;
+}
+
 .order-status {
   width: 35%;
-  padding: 20px;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
   text-align: center;
 }
 
@@ -34,7 +33,7 @@
   height: 100%;
   background-color: #34d399;
   border-radius: 12px;
-  transition: width 1s ease-in-out; /* Adjusted to smoothen the progress bar */
+  transition: width 1s ease-in-out;
 }
 
 button {
@@ -53,8 +52,7 @@ button:hover {
 }
 
 .go-home-button {
-  width: auto; /* Make button smaller */
-  padding: 8px 16px; /* Adjust padding for a smaller button */
+  padding: 8px 16px;
   border-radius: 8px;
   background-color: #34d399;
   color: white;

@@ -7,71 +7,43 @@ const MenuPage = ({ cart, addToCart, handleRemoveFromCart }) => {
   const [smoothies, setSmoothies] = useState([]);
   const navigate = useNavigate();
 
+  // Fetch smoothies from the database
   useEffect(() => {
     const fetchSmoothies = async () => {
-      const cachedSmoothies = localStorage.getItem("smoothies");
-
-      if (cachedSmoothies) {
-        setSmoothies(JSON.parse(cachedSmoothies));
-      }
-
-      const { data, error } = await supabase.from("smoothies").select("*");
-      if (error) {
-        console.error("Error fetching smoothies:", error);
-      } else {
-        setSmoothies(data);
-        localStorage.setItem("smoothies", JSON.stringify(data));
-      }
+      const { data } = await supabase.from("smoothies").select("*");
+      setSmoothies(data); 
     };
-
     fetchSmoothies();
-
-    return () => {
-      localStorage.removeItem("smoothies");
-    };
   }, []);
 
+  // Navigate to smoothie details page
   const handleSmoothieClick = (smoothie) => {
     navigate(`/smoothie/${smoothie.id}`, { state: { smoothie } });
   };
 
+  // Calculate the total price of the items
+  const getTotalPrice = () =>
+    cart.reduce((total, item) => total + item.totalPrice * item.quantity, 0).toFixed(2);
+
   return (
     <div className="menu-container">
-      {/* Left Side - Smoothie List */}
       <div className="menu-left">
         <h1>Smoothie Menu</h1>
         <div className="menu-grid">
           {smoothies.map((smoothie) => (
             <div
-              className="menu-item"
               key={smoothie.id}
-              onClick={() => handleSmoothieClick(smoothie)}
-              style={{ cursor: "pointer" }}
+              className="menu-item"
+              onClick={() => handleSmoothieClick(smoothie)} 
             >
-              <img
-                className="smoothie-image"
-                src={smoothie.image_url}
-                alt={smoothie.name}
-              />
+              <img className="smoothie-image" src={smoothie.image_url} alt={smoothie.name} />
               <h3>{smoothie.name}</h3>
               <p>${smoothie.price.toFixed(2)}</p>
-              <div className="menu-item-footer">
-                <button
-                  className="more-info-button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleSmoothieClick(smoothie);
-                  }}
-                >
-                  More Info
-                </button>
-              </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Right Side - Order Summary */}
       <div className="menu-right">
         <h2>Your Order</h2>
         {cart.length === 0 ? (
@@ -81,16 +53,10 @@ const MenuPage = ({ cart, addToCart, handleRemoveFromCart }) => {
             <ul className="cart-list">
               {cart.map((item, index) => (
                 <li key={index} className="cart-item">
-                  <span>
-                    {item.name} x {item.quantity}
-                  </span>
-                  <span>
-                    ${(item.totalPrice * item.quantity).toFixed(2)}
-                  </span>
+                  <span>{item.name} x {item.quantity}</span>
+                  <span>${(item.totalPrice * item.quantity).toFixed(2)}</span>
                   {item.addIns.length > 0 && (
-                    <p className="add-ins">
-                      <strong>Add-ins:</strong> {item.addIns.join(", ")}
-                    </p>
+                    <p className="add-ins"><strong>Add-ins:</strong> {item.addIns.join(", ")}</p>
                   )}
                   <button
                     onClick={() => handleRemoveFromCart(item.id, item.addIns)}
@@ -101,12 +67,7 @@ const MenuPage = ({ cart, addToCart, handleRemoveFromCart }) => {
                 </li>
               ))}
             </ul>
-            <h3>
-              Total: $
-              {cart
-                .reduce((total, item) => total + item.totalPrice * item.quantity, 0)
-                .toFixed(2)}
-            </h3>
+            <h3>Total: ${getTotalPrice()}</h3>
             <button
               onClick={() => navigate("/checkout", { state: { cart } })}
               className="checkout-button"
