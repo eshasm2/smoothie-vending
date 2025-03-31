@@ -2,17 +2,18 @@
 
 Setup Instructions:
 
-1. Clone the repository
+1. Run the following command to install dependencies:
+
+```bash
+npm install react react-router-dom supabase axios
+```
+
+2. Clone the repository
    
 git clone [https://github.com/eshasm2/zenblen-smoothie-kiosk.git](https://github.com/eshasm2/smoothie-vending.git)
 
 ```bash
 cd zenblen-smoothie-kiosk
-```
-2. Run the following command to install dependencies:
-
-```bash
-npm install react react-router-dom supabase axios
 ```
 
 ```bash
